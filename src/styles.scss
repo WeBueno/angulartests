@@ -1,12 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
-
 @import './app/theme.scss';
-
 
 @import url('https://fonts.googleapis.com/css?family=Muli:400,700');
 
 body {
-    background:#e8e8e8;
-    font-family: 'Muli';
+    background:#ffffff;
+    padding: 3em;
+    font-family: 'Muli', 'Arial';
+    color:#000;
+}
+ul {
+    list-style-type:none;
+    margin:0 0 2em 0;
+    padding:0;
+}
+ul li {
+    display:inline;
+    margin-right: 30px;
+}
+ul li a {
+    font-size: 1.5em;
+}
+a {
+    color:#fff;
+    text-decoration:none;
 }

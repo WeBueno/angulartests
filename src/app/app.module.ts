@@ -14,6 +14,7 @@ import { ServicesComponent } from './services/services.component';
 import { ContactComponent } from './contact/contact.component';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
+import { HomeService } from './home/home.service';
 import { AppService } from './services/services.service';
 import { CostcenterCostsComponent } from './costcenter-costs/costcenter-costs.component';
 import { IndividualCostsComponent } from './individual-costs/individual-costs.component';
@@ -39,6 +40,7 @@ import { IndividualCostsComponent } from './individual-costs/individual-costs.co
   ],
   providers: [
     AppService,
+    HomeService,
     { provide: HTTP_INTERCEPTORS, useClass: ApiInterceptor, multi: true }
   ],
   bootstrap: [AppComponent]

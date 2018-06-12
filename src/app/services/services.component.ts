@@ -8,7 +8,7 @@ import { Chart } from 'chart.js';
   styleUrls: ['./services.component.scss']
 })
 export class ServicesComponent implements OnInit {
-  restItems: Object[];
+  restItems: any[];
   chart = [];
 
   constructor(private appService : AppService) {}

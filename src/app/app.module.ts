@@ -15,6 +15,8 @@ import { ContactComponent } from './contact/contact.component';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { AppService } from './services/services.service';
+import { CostcenterCostsComponent } from './costcenter-costs/costcenter-costs.component';
+import { IndividualCostsComponent } from './individual-costs/individual-costs.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { AppService } from './services/services.service';
     ServicesComponent,
     ContactComponent,
     HomeComponent,
-    AboutComponent
+    AboutComponent,
+    CostcenterCostsComponent,
+    IndividualCostsComponent
   ],
   imports: [
     BrowserModule,

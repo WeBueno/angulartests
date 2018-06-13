@@ -6,9 +6,9 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 @Injectable()
 export class HomeService  {
 
-  protected urlAllCosts   : string = 'https://eduardo-andrade.outsystemscloud.com/RestExposureSvc/rest/restapi/list';
-  protected urlOffensors  : string = 'https://eduardo-andrade.outsystemscloud.com/RestExposureSvc/rest/restapi/list';
-  protected urlSavers     : string = 'https://eduardo-andrade.outsystemscloud.com/RestExposureSvc/rest/restapi/list';
+  protected urlAllCosts   : string = 'https://outsystems-dev.renault.br/DashboardCosts/rest/API/measure?DateTimeBegin=2014-12-31T23:59:59.938Z&DateTimeEnd=2019-12-31T23:59:59.938Z';
+  protected urlOffensors  : string = 'https://outsystems-dev.renault.br/DashboardCosts/rest/API/measureOffensors';
+  protected urlSavers     : string = 'https://outsystems-dev.renault.br/DashboardCosts/rest/API/measureSavers';
 
 
   constructor(private http: HttpClient, public sanitizer: DomSanitizer) {}

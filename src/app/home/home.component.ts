@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef } from '@angular/core';
 import { HomeService } from './home.service';
 import { Chart } from 'chart.js';
 
@@ -11,16 +11,32 @@ export class HomeComponent implements OnInit {
 
   restItems: any[];
 
-  chart = [];
+  costsChart = [];
+
   topOffersorsCC = [];
   topSaversCC = [];
   topOffersorsUser = [];
   topSaversUser = [];
 
-  constructor(private homeService: HomeService) { }
+
+  constructor(private homeService: HomeService, private elementRef: ElementRef) { }
 
   ngOnInit() {
     this.getRestItems();
+  }
+
+  uniquify(arr: any[]) {
+    let seen = [];
+    //You can filter based on Id or Name based on the requirement
+    let uniqueArr = arr.filter(function(item) {
+      if (seen.hasOwnProperty(item)) {
+          return false;
+      } else {
+          seen[item] = true;
+          return true;
+      }
+    };
+    return uniqueArr;
   }
 
   // Read all REST Items
@@ -31,34 +47,87 @@ export class HomeComponent implements OnInit {
           this.restItems = restItems;
           console.log(this.restItems);
 
-          let valMax = this.restItems.map(res => res.ValueMax);
-          let valMin = this.restItems.map(res => res.ValueMin);
-          let dateTm = this.restItems.map(res => res.DateTime);
+          //Loading periods
+          let periods = this.restItems.map(res => res.Period);
+          let uniquePeriods = this.uniquify(periods);
 
-          let weatherDates = []
-          dateTm.forEach((res) => {
-              let jsdate = new Date(res)
-              weatherDates.push(jsdate.toLocaleTimeString('en', { year: 'numeric', month: 'short', day: 'numeric' }))
-          })
+          //Loading cost types
+          let costTypes = this.restItems.map(res => res.CostTypeName);
+          let uniqueCostTypes = this.uniquify(costTypes);
 
-          this.chart = new Chart('canvas', {
+          console.log(costTypes);
+          console.log(uniqueCostTypes);
+
+          let costs = [];
+
+          uniqueCostTypes.forEach((res) => {
+
+            console.log('teste');
+            let values= [];
+
+            this.restItems.filter(function(obj) {
+              console.log((obj.CostTypeName == res));
+              return (obj.CostTypeName == res);
+            }).map(itm => {
+              console.log(itm.CostTypeName);
+              console.log(itm);
+              values.push(itm.Value);
+
+
+            });
+
+            costs.push(
+              {
+                data: values,
+                borderColor: "#ffcc00",
+                fill: false,
+                label: res
+              }
+            );
+            console.log(values);
+
+          });
+          console.log(costs);
+
+          let printer = this.restItems.filter(function(obj) {
+            return (obj.CostTypeIdentifier == 1);
+          }).map(res => res.Value);
+
+          let desktop = this.restItems.filter(function(obj) {
+            return (obj.CostTypeIdentifier == 2);
+          }).map(res => res.Value);
+
+          console.log(uniquePeriods);
+          console.log(printer);
+          console.log(desktop);
+
+          //this.canvas = document.getElementById('canvas');
+          //this.ctx = this.canvas.getContext('2d');
+
+          //let htmlRef = this.elementRef.nativeElement.querySelector('canvas');
+          //console.log(htmlRef);
+          //this.costsChart = new Chart(htmlRef, {
+          this.costsChart = new Chart('canvas', {
             type: 'line',
             borderWidth: 50,
             data: {
-              labels: weatherDates,
+              labels: uniquePeriods,
+              datasets: costs,
+              /*
               datasets: [
                 {
-                  data: valMax,
+                  data: printer,
                   borderColor: "#3cba9f",
                   fill: false,
-                  label: 'Max Values',
+                  label: 'Printer',
                   },
                 {
-                  data: valMin,
+                  data: desktop,
                   borderColor: "#ffcc00",
                   fill: false,
-                  label: 'Min Values'
+                  label: 'Desktop'
                 },
+                */
               ]
             },
             options: {
@@ -71,10 +140,6 @@ export class HomeComponent implements OnInit {
                 }],
                 yAxes: [{
                   display: true,
-                  ticks: {
-                    suggestedMax: 20,
-                    stepSize: 2
-                  }
                 }],
               }
             }

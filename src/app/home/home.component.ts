@@ -9,20 +9,47 @@ import { Chart } from 'chart.js';
 })
 export class HomeComponent implements OnInit {
 
-  restItems: any[];
+  //Array color for datasets
+  colors = ['#ffcc00','#4286f4','#46d6b7','#78ff30','#83fc37','#ffcc00','#ffcc00'];
+
+  restItems: any[]; //Array to manage the ws
+  offensorsList: any[]; //Array to manage the ws
 
   costsChart = [];
 
-  topOffersorsCC = [];
-  topSaversCC = [];
-  topOffersorsUser = [];
-  topSaversUser = [];
+  costs = [];
+
+  topOffersorsCC : any[];
+  topOffersorsUser : any[];
+  topSaversCC : any[];
+  topSaversUser : any[];
 
 
   constructor(private homeService: HomeService, private elementRef: ElementRef) { }
 
   ngOnInit() {
+    this.getOffensors();
     this.getRestItems();
+  }
+
+  getOffensors(): void {
+    this.homeService.getOffensors().
+      subscribe(
+        offensorsList => {
+          this.offensorsList = offensorsList;
+
+          console.log(offensorsList);
+
+          //let topOffersorsCC = this.offensorsList['CostCenterValueList'].map(res => res);
+          this.topOffersorsCC = this.offensorsList['CostCenterValueList'];
+          this.topOffersorsUser = this.offensorsList['PortalUserValueList'];
+
+          console.log(this.topOffersorsCC);
+
+        }
+
+      )
+
   }
 
   uniquify(arr: any[]) {
@@ -35,7 +62,7 @@ export class HomeComponent implements OnInit {
           seen[item] = true;
           return true;
       }
-    };
+    });
     return uniqueArr;
   }
 
@@ -58,7 +85,7 @@ export class HomeComponent implements OnInit {
           console.log(costTypes);
           console.log(uniqueCostTypes);
 
-          let costs = [];
+          let i = 0;
 
           uniqueCostTypes.forEach((res) => {
 
@@ -72,22 +99,30 @@ export class HomeComponent implements OnInit {
               console.log(itm.CostTypeName);
               console.log(itm);
               values.push(itm.Value);
-
-
             });
 
-            costs.push(
+            if (values.length >= 2) {
+              let lastIdx = values.length - 1;
+              if (values[lastIdx] > values.length[lastIdx - 1]) {
+
+              } else {
+
+              }
+            }
+
+            this.costs.push(
               {
                 data: values,
-                borderColor: "#ffcc00",
+                borderColor: this.colors[i],
                 fill: false,
                 label: res
               }
             );
+            i += 1;
             console.log(values);
 
           });
-          console.log(costs);
+          console.log(this.costs);
 
           let printer = this.restItems.filter(function(obj) {
             return (obj.CostTypeIdentifier == 1);
@@ -112,7 +147,7 @@ export class HomeComponent implements OnInit {
             borderWidth: 50,
             data: {
               labels: uniquePeriods,
-              datasets: costs,
+              datasets: this.costs,
               /*
               datasets: [
                 {
@@ -127,8 +162,8 @@ export class HomeComponent implements OnInit {
                   fill: false,
                   label: 'Desktop'
                 },
-                */
               ]
+              */
             },
             options: {
               legend: {
